@@ -39,11 +39,5 @@ class IngestionOrchestrator:
         self.logger.info('finish the main')
 
 
+ingestion_orchestrator = IngestionOrchestrator()
 
-
-
-
-
-
-i = IngestionOrchestrator()
-i.run()

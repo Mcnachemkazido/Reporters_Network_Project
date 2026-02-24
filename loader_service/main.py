@@ -1,13 +1,29 @@
-from fastapi import FastAPI, UploadFile ,File ,Form
-import uvicorn
+import logging
+from MongoLoaderConfig import MongoLoaderConfig
+from GridFSStorage import GridFSStorage
+from MongoLoaderOrchestrator import MongoLoaderOrchestrator
 
-app = FastAPI()
 
-@app.post('/file')
-def file_upload(image_id: str = Form(...),file: UploadFile = File(...)):
-    print(image_id)
-    print(file.file.read())
-    return {True : "The file was received successfully"}
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000)
+logging.basicConfig(level=logging.INFO,
+    format = '%(asctime)s | %(name)-15s | %(levelname)-8s | %(message)s',
+    datefmt='%H:%M:%S')
+
+logger = logging.getLogger(__name__)
+
+logger.info('start the main')
+mongo_uri = MongoLoaderConfig().get_mongo_loader_uri()
+grid_storge = GridFSStorage(mongo_uri,logging.getLogger(GridFSStorage.__module__))
+mongodb_loader = MongoLoaderOrchestrator(grid_storge,logging.getLogger(MongoLoaderConfig.__module__))
+mongodb_loader.run()
+
+
+
+
+
+
+
+
+
+
+
