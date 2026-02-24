@@ -14,7 +14,7 @@ class KafkaPublisher:
         value = json.dumps(event).encode("utf-8")
 
         producer.produce(
-            topic="orders",
+            topic=self.topic_name,
             value=value,
             callback=self.delivery_report
         )
