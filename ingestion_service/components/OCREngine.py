@@ -10,7 +10,7 @@ class OCREngine:
 
     def extract_text(self,image_path):
         extract_info = self.reader.readtext(image_path, detail=0)
-        self.logger.info(f'extract_info for image ,image_path: {image_path}')
+        self.logger.info(f'i extract_info for image ,image_path: {image_path}')
         return extract_info
 
 

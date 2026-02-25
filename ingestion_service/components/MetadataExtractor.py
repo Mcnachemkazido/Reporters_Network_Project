@@ -19,6 +19,7 @@ class MetadataExtractor:
 
 
     def generate_image_id(self,image_path):
-        self.logger.info(f'I created image id for image path:{image_path}')
-        return str(uuid.uuid4())
+        image_id = str(uuid.uuid4())
+        self.logger.info(f'I created image id for image path:{image_path} the id is:{image_id}')
+        return image_id
 

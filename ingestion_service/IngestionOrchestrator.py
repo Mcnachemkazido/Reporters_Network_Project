@@ -1,9 +1,9 @@
 import logging
-from IngestionConfig import IngestionConfig
-from OCREngine import OCREngine
-from MetadataExtractor import MetadataExtractor
-from MongoLoaderClient import MongoLoaderClient
-from KafkaPublisher import KafkaPublisher
+from components.IngestionConfig import IngestionConfig
+from components.OCREngine import OCREngine
+from components.MetadataExtractor import MetadataExtractor
+from components.MongoLoaderClient import MongoLoaderClient
+from components.KafkaPublisher import KafkaPublisher
 
 
 logging.basicConfig(level=logging.INFO,
@@ -25,18 +25,19 @@ class IngestionOrchestrator:
 
 
     def run(self):
-        self.logger.info('start the main')
+        self.logger.info('🤓🤓I start the loop that goes through all the images')
 
         sum_files = len(self.dir_path)
         for file in range(sum_files):
-            image_id = self.metadata_extractor.generate_image_id(f'{self.dir_path}/tweet_{file}.png')
             meta_data = self.metadata_extractor.extract_metadata(f'{self.dir_path}/tweet_{file}.png')
             text_extraction = self.ocr_engine.extract_text(f'{self.dir_path}/tweet_{file}.png')
+            image_id = self.metadata_extractor.generate_image_id(f'{self.dir_path}/tweet_{file}.png')
 
             self.mongo_client.send_to_mongodb_loader(f'{self.dir_path}/tweet_{file}.png',image_id)
-            self.publisher.publish({"image_id":image_id,"meta_data":meta_data,  "raw_text":text_extraction})
+            self.publisher.publish({"image_id":image_id,"meta_data":meta_data, "raw_text":text_extraction})
 
-        self.logger.info('finish the main')
+        self.logger.info('💯💯I finished the loop that went'
+                         ' through all the images and created data from them.')
 
 
 ingestion_orchestrator = IngestionOrchestrator()

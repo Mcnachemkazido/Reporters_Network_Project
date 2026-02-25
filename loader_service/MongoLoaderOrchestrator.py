@@ -1,23 +1,27 @@
-from fastapi import FastAPI, UploadFile ,File ,Form
-import uvicorn
+import logging
+from fastapi import UploadFile ,File ,Form ,APIRouter
+from components.GridFSStorage import GridFSStorage
+from components.MongoLoaderConfig import MongoLoaderConfig
+
+logging.basicConfig(level=logging.INFO,
+    format = '%(asctime)s | %(name)-15s | %(levelname)-8s | %(message)s',
+    datefmt='%H:%M:%S')
+
+logger = logging.getLogger(__name__)
+logger.info('🤩🤩I started running the server that sendsI started running the server that sends to mongodb')
+mongo_uri = MongoLoaderConfig().get_mongo_loader_uri()
+grid_storge = GridFSStorage(mongo_uri,logging.getLogger(GridFSStorage.__module__))
 
 
-class MongoLoaderOrchestrator:
-    def __init__(self,storage, logger):
-        self.storage = storage
-        self.logger = logger
-
-    def handle_upload(self,request_id,request_body):
-        self.storage.save_stream_file(request_id ,request_body)
+route = APIRouter()
 
 
-    def run(self):
-        app = FastAPI()
-        @app.post('/file')
-        def file_upload(image_id: str = Form(...), file: UploadFile = File(...)):
-            self.handle_upload(image_id,file.file.read())
-            self.logger.info(f'I got a new file file_id: {image_id}')
-        uvicorn.run(app,port=8001,host='localhost')
+@route.post('/file')
+def file_upload(image_id: str = Form(...), file: UploadFile = File(...)):
+    grid_storge.save_stream_file(image_id,file.file.read())
+
+
+
 
 
 

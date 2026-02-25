@@ -11,9 +11,10 @@ class GridFSStorage:
         self.db = self.client['images']
         self.fs = gridfs.GridFS(self.db)
 
+
     def save_stream_file(self,image_id ,stream_file):
         file_id = self.fs.put(stream_file, file_id=image_id,description='Text of picture')
-        self.logger.info(f'i send file to mongodb {file_id}')
+        self.logger.info(f'i send to mongodb binary image, image id:{file_id}')
 
 
 

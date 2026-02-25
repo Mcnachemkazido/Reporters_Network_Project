@@ -20,11 +20,12 @@ class CleanOrchestrator:
 
 
     def run(self):
-        self.logger.info('Starts creating the loop: receive information, clean and send')
+        self.logger.info('🤗🤗Starts creating the loop: receive information, clean and send')
         while True:
             info = self.consumer.start()
-            clean_info = self.cleaner.clean("".join(info['raw_text']))
-            info['raw_text'] = clean_info
+            time = info['raw_text'].pop(0)
+            clean_info = self.cleaner.cleaning_process("".join(info['raw_text']))
+            info['raw_text'] = {'time':time,'clean_info':clean_info}
             self.publisher.publish(info)
 
 
