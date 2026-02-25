@@ -1,8 +1,8 @@
 import logging
-from clean_service.components.CleanConfig import CleanConfig
-from clean_service.components.KafkaConsumer import KafkaConsumer
-from clean_service.components.TextCleaner import TextCleaner
-from clean_service.components.KafkaPublisher import KafkaPublisher
+from components.CleanConfig import CleanConfig
+from components.KafkaConsumer import KafkaConsumer
+from components.TextCleaner import TextCleaner
+from components.KafkaPublisher import KafkaPublisher
 
 logging.basicConfig(level=logging.INFO,
     format = '%(asctime)s | %(name)-15s | %(levelname)-8s | %(message)s',

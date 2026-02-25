@@ -29,7 +29,7 @@ class KafkaConsumer:
                 continue
             value = msg.value().decode('utf-8')
             info = json.loads(value)
-            self.logger.info(f'I received a new message image id: {info['image_id']}')
+            self.logger.info(f"I received a new message image id: {info['image_id']}")
             return info
 
 

@@ -18,7 +18,7 @@ class KafkaPublisher:
             value=value,
             callback=self.delivery_report
         )
-        self.logger.info(f'I posted a message to kafka for event: {event['image_id']}')
+        self.logger.info(f"I posted a message to kafka for event: {event['image_id']}")
         self.producer.flush()
 
 
@@ -26,7 +26,7 @@ class KafkaPublisher:
         if err:
             self.logger.error(f"❌ Delivery failed: {err}")
         else:
-            self.logger.info(f"✅ Delivered {msg.value().decode("utf-8")}")
+            self.logger.info(f"✅ Delivered {msg.value().decode('utf-8')}")
             self.logger.info(f"✅ Delivered to {msg.topic()}  : at offset {msg.offset()}")
 
 
