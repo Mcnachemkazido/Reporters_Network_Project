@@ -27,6 +27,7 @@ class TextAnalyzer:
         self.logger.info('2️⃣I analyzed the 10 most common words')
         return top10_keys
 
+
     def get_weapons(self,text):
         weapons_list = self.weapons_list
         weapons = []
@@ -37,6 +38,7 @@ class TextAnalyzer:
         if weapons:
             return weapons
         return None
+
 
     def analyzing_emotion_text(self,text):
         res = SentimentIntensityAnalyzer().polarity_scores(text)
