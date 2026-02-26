@@ -89,6 +89,17 @@ services:
         condition: service_healthy
 
 
+  analytics_service:
+    build: ./analytics_service
+    container_name: analytics_service
+    environment:
+      BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
 
 
 
