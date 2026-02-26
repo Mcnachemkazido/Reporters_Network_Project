@@ -25,7 +25,7 @@ class CleanOrchestrator:
             info = self.consumer.start()
             time = info['raw_text'].pop(0)
             clean_info = self.cleaner.cleaning_process("".join(info['raw_text']))
-            info['raw_text'] = {'time':time,'clean_info':clean_info}
+            info = {'image_id':info['image_id'],'time':time,'clean_info':clean_info}
             self.publisher.publish(info)
 
 

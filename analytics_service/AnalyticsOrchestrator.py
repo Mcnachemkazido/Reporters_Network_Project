@@ -22,9 +22,10 @@ class AnalyticsOrchestrator:
         self.logger.info('😍😘🥰 Starts running the data analysis loop')
         while True:
             info = self.consumer.start()
-            analyzed_info = self.analyzer.analysis_flow(info['raw_text']['clean_info'])
-            info['data_analysis'] = analyzed_info
-            self.publisher.publish(info)
+            analyzed_info = self.analyzer.analysis_flow(info['clean_info'])
+            send_info = analyzed_info
+            send_info['image_id'] = info['image_id']
+            self.publisher.publish(send_info)
 
 
 

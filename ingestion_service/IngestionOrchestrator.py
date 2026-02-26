@@ -1,4 +1,5 @@
 import logging
+import os
 from components.IngestionConfig import IngestionConfig
 from components.OCREngine import OCREngine
 from components.MetadataExtractor import MetadataExtractor
@@ -26,14 +27,12 @@ class IngestionOrchestrator:
 
     def run(self):
         self.logger.info('🤓🤓I start the loop that goes through all the images')
+        for file in os.scandir(self.dir_path):
+            meta_data = self.metadata_extractor.extract_metadata(file.path)
+            text_extraction = self.ocr_engine.extract_text(file.path)
+            image_id = self.metadata_extractor.generate_image_id(file.path)
 
-        sum_files = len(self.dir_path)
-        for file in range(sum_files):
-            meta_data = self.metadata_extractor.extract_metadata(f'{self.dir_path}/tweet_{file}.png')
-            text_extraction = self.ocr_engine.extract_text(f'{self.dir_path}/tweet_{file}.png')
-            image_id = self.metadata_extractor.generate_image_id(f'{self.dir_path}/tweet_{file}.png')
-
-            self.mongo_client.send_to_mongodb_loader(f'{self.dir_path}/tweet_{file}.png',image_id)
+            self.mongo_client.send_to_mongodb_loader(file.path,image_id)
             self.publisher.publish({"image_id":image_id,"meta_data":meta_data, "raw_text":text_extraction})
 
         self.logger.info('💯💯I finished the loop that went'
