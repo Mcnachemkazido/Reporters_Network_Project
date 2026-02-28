@@ -1,5 +1,4 @@
 from confluent_kafka import Consumer
-from IndexerConfig import IndexerConfig
 import logging
 import json
 
@@ -32,9 +31,8 @@ class KafkaConsumer:
                 continue
             value = msg.value()
             info = json.loads(value.decode('utf-8'))
-            print(info)
+            self.logger.info(f"1️⃣I consumed new data image_id: {info['image_id']}")
+            return info
 
 
 
-k = KafkaConsumer(IndexerConfig().get_bootstrap_servers(),['RAW','CLEAN','ANALYTICS'],'ggg',logger)
-k.start()

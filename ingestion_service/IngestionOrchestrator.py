@@ -33,7 +33,10 @@ class IngestionOrchestrator:
             image_id = self.metadata_extractor.generate_image_id(file.path)
 
             self.mongo_client.send_to_mongodb_loader(file.path,image_id)
-            self.publisher.publish({"image_id":image_id,"meta_data":meta_data, "raw_text":text_extraction})
+
+            meta_data["image_id"] = image_id
+            meta_data["raw_text"] = text_extraction
+            self.publisher.publish(meta_data)
 
         self.logger.info('💯💯I finished the loop that went'
                          ' through all the images and created data from them.')

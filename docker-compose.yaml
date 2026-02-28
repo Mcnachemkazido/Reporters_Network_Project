@@ -58,6 +58,22 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
+    healthcheck:
+      test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
 
 
   ingestion_service:
@@ -112,6 +128,20 @@ services:
       kafka:
         condition: service_healthy
       mongodb:
+        condition: service_healthy
+
+  elastic_indexer:
+    build: ./elastic_indexer
+    container_name: elastic_indexer
+    environment:
+      BOOTSTRAP_SERVERS: kafka:29092
+      ES_URI: http://elasticsearch:9200
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      elasticsearch:
         condition: service_healthy
 
 
